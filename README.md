@@ -282,9 +282,7 @@ new Date(): Date; // Date 객체 반환
 https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date
 
 ```
-
 new Date()
-
 ```
 
 | parameter                                                | return value                                                                                                                                                                                                                                                                                                                       |
@@ -331,22 +329,18 @@ new Date().method
 - 두 문자열이 같은 언어인지, 같은 언어 & 다른 방언인지 비교
 
 ```
-
-const isSameLang = Intl.Collator('ko-KR').compare('안녕', '안녕') === 0;
-
+const isSameLang = Intl.Collator('ko-KR').compare('안녕', '안녕') === 0; // true
 ```
 
 <br/>
 
 ## (2) 숫자 형식: Intl.NumberFormat()
 
-- 숫자를 특정 언어와 문화에 맞는 형식으로 표시함 (ex) 4,567 = 사천 오백 육십 칠
+- 숫자를 특정 언어와 문화에 맞는 형식으로 표시함
 
 ```
-
 const numberFormat = new Intl.NumberFormat('ko-KR');
-console.log(numberFormat.format(123)); // 일백이십삼만
-
+console.log(numberFormat.format(1234567)); // 1,234,567
 ```
 
 <br/>
@@ -357,7 +351,6 @@ console.log(numberFormat.format(123)); // 일백이십삼만
 - https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat
 
 ```
-
 const date = new Date(Date.UTC(2012, 11, 20, 3, 0, 0));
 
 // Intl.DateTimeFormat() 매개변수 없으면 디폴트 로케일, 시간대에 따라 다른 값 출력
@@ -367,7 +360,7 @@ console.log(new Intl.DateTimeFormat().format(date)); // 2012.12.20
 console.log(new Intl.DateTimeFormat('ko-KR').format(date)); // 2012.12.20
 
 // Intl.DateTimeFormat() - 옵션 설정 및 formatToParts 사용
-new Intl.DateTimeFormat('en-US', {
+new Intl.DateTimeFormat('ko-KR', {
 year: "numeric",
 month: "numeric",
 day: "numeric",
@@ -376,9 +369,8 @@ minute: "numeric",
 second: "numeric",
 weekday: "short",
 hour12: true, // AM, PM
-timeZone: 'ko-KR',
+timeZone: 'Asia/Seoul',
 }).formatToParts(new Date())
-
 ```
 
 ※ `Intl.Locale.availableLocales`: 사용 가능한 로케일 목록 반환
@@ -387,6 +379,8 @@ timeZone: 'ko-KR',
 <br/>
 
 # Luxon 코드 분석 (dateTime.js)
+- IANA database 어떻게 가져와서 사용하는지
+- dst 계산 어떻게 하는지
 
 <br/>
 <br/>
