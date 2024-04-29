@@ -383,6 +383,164 @@ timeZone: 'Asia/Seoul',
 - dst 계산 어떻게 하는지
 
 <br/>
+
+## IANA DB를 직접 이용하는 것이 아닌 Intl.DateTimeFormat()를 이용하는 것이다!
+
+<br/>
+
+## (1) 입력받은 timezone이 유효한지 여부 확인 로직
+- IANAZone.js > 101 line: isValieZone()
+``` 
+  /**
+   * Returns whether the provided string identifies a real zone
+   * @param {string} zone - The string to check
+   * @example IANAZone.isValidZone("America/New_York") //=> true
+   * @example IANAZone.isValidZone("Fantasia/Castle") //=> false
+   * @example IANAZone.isValidZone("Sport~~blorp") //=> false
+   * @return {boolean}
+   */
+  static isValidZone(zone) {
+    if (!zone) {
+      return false;
+    }
+    try {
+      new Intl.DateTimeFormat("en-US", { timeZone: zone }).format();
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+```
+
+<br/>
+
+## (2) offset 구하는 방법
+- IANAZone.js > 147 line: offset()
+```
+let dtfCache = {};
+function makeDTF(zone) {
+  if (!dtfCache[zone]) {
+    dtfCache[zone] = new Intl.DateTimeFormat("en-US", {
+      hour12: false,
+      timeZone: zone,
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      era: "short",
+    });
+  }
+  return dtfCache[zone];
+}
+
+const typeToPos = {
+  year: 0,
+  month: 1,
+  day: 2,
+  era: 3,
+  hour: 4,
+  minute: 5,
+  second: 6,
+};
+
+function hackyOffset(dtf, date) {
+  const formatted = dtf.format(date).replace(/\u200E/g, ""), // (참고) "u200E" 문자는 텍스트의 방향을 강제로 고정해주는 유니코드 문자이며, 문자 형태로 보이지는 않음
+    parsed = /(\d+)\/(\d+)\/(\d+) (AD|BC),? (\d+):(\d+):(\d+)/.exec(formatted),
+    [, fMonth, fDay, fYear, fadOrBc, fHour, fMinute, fSecond] = parsed;
+  return [fYear, fMonth, fDay, fadOrBc, fHour, fMinute, fSecond];
+}
+
+/* 
+  - Intl.DateTimeFormat().formatToParts() 
+  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/formatToParts
+*/
+function partsOffset(dtf, date) {
+  const formatted = dtf.formatToParts(date);
+  const filled = [];
+  for (let i = 0; i < formatted.length; i++) {
+    const { type, value } = formatted[i];
+    const pos = typeToPos[type];
+
+    if (type === "era") { // era: 연대
+      filled[pos] = value;
+    } else if (!isUndefined(pos)) {
+      filled[pos] = parseInt(value, 10);
+    }
+  }
+  return filled;
+}
+...
+
+// convert a calendar object to a local timestamp (epoch, but with the offset baked in)
+export function objToLocalTS(obj) {
+  let d = Date.UTC(
+    obj.year,
+    obj.month - 1,
+    obj.day,
+    obj.hour,
+    obj.minute,
+    obj.second,
+    obj.millisecond
+  );
+
+  // for legacy reasons, years between 0 and 99 are interpreted as 19XX; revert that
+  if (obj.year < 100 && obj.year >= 0) {
+    d = new Date(d);
+    // set the month and day again, this is necessary because year 2000 is a leap year, but year 100 is not
+    // so if obj.year is in 99, but obj.day makes it roll over into year 100,
+    // the calculations done by Date.UTC are using year 2000 - which is incorrect
+    d.setUTCFullYear(obj.year, obj.month - 1, obj.day);
+  }
+  return +d;
+}
+...
+
+offset(ts) {
+  const date = new Date(ts);
+
+  if (isNaN(date)) return NaN;
+
+  const dtf = makeDTF(this.name); // Intl.DateTimeFormat 인스턴스 생성/할당
+  let [year, month, day, adOrBc, hour, minute, second] = dtf.formatToParts
+    ? partsOffset(dtf, date)
+    : hackyOffset(dtf, date);
+
+  if (adOrBc === "BC") {
+    year = -Math.abs(year) + 1;
+  }
+
+  // because we're using hour12 and https://bugs.chromium.org/p/chromium/issues/detail?id=1025564&can=2&q=%2224%3A00%22%20datetimeformat
+  const adjustedHour = hour === 24 ? 0 : hour;
+
+  const asUTC = objToLocalTS({
+    year,
+    month,
+    day,
+    hour: adjustedHour,
+    minute,
+    second,
+    millisecond: 0,
+  });
+
+  let asTS = +date; // timestamp
+  const over = asTS % 1000; // s로 변환후 남은 ms 시간
+  asTS -= over >= 0 ? over : 1000 + over;
+  return (asUTC - asTS) / (60 * 1000);
+}
+```
+
+<br/>
+(How??)    
+- asTS: +new Date() -> UTC 시간 기반 타임스탬프 반환 
+  = Date.now() / new Date().getTime()
+- dtf: Intl.DateTimeFormat().formatToParts() 통해 타임존에 해당하는 (로컬)시간을 구함
+- asUTC: dtf 값을 Date.UTC()로 변환하여 타임존에 해당하는 시간의 UTC 시간
+
+
+
+<br/>
 <br/>
 
 # Date 관련 라이브러리 비교
