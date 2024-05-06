@@ -159,6 +159,7 @@
 <br/>
 
 ## RFC2822
+
 https://datatracker.ietf.org/doc/html/rfc2822#page-14
 
 <br/>
@@ -195,7 +196,7 @@ https://datatracker.ietf.org/doc/html/rfc2822#page-14
 
 - 협정 세계시(UTC)와 현지 로컬 시간의 차이
 - '+' 또는 '-' 기호와 함께 시간(HH:MM)으로 표기
-- '+' 기호는 UTC보다 빠른 시간(해를 더 먼저 보고, 해가 더 빨리 짐),   
+- '+' 기호는 UTC보다 빠른 시간(해를 더 먼저 보고, 해가 더 빨리 짐),  
   '-' 기호는 UTC보다 느린 시간(해를 더 늦게 보고, 해가 더 늦게 짐)
 - 일광 절약 시간(DST)을 사용하는 지역은 여름철에 UTC 오프셋이 변경될 수 있음
 - 일부 국가는 여러 개의 시간대를 가지고 있으며, 각 시간대마다 고유한 UTC 오프셋을 가지고 있음
@@ -209,6 +210,7 @@ https://datatracker.ietf.org/doc/html/rfc2822#page-14
 <br/>
 
 # IANA(Internet Assigned Numbers Authority) 시간대 데이터베이스
+
 https://timeapi.io/documentation/iana-timezones
 https://www.iana.org/time-zones
 https://github.com/eggert/tz
@@ -219,22 +221,22 @@ https://nodatime.org/TimeZones?version=2024a&format=json
 - code/data 형태로 제공함 (js로 바로 사용하기엔 어려움...ㅜㅜ)
   -> 다른 라이브러리들은 어떻게 사용하고 있는지 분석 필요!!
 - moment-timezone/luxon 등 오픈 소스 라이브러리를 사용할 수 있음
-(해당 라이브러리들은 IANA database 사용)
+  (해당 라이브러리들은 IANA database 사용)
 
 (참고) https://data.iana.org/time-zones/tz-link.html
+
 - 많은 최신 Javascript 런타임은 Intl.DateFimeFormat의 timeZone 옵션을 통해 기본적으로 tz를 지원함
 - date-fns, Day.js, Luxon, Moment Timezone, Timezone 등 라이브러리 소개함
-
-
 
 <br/>
 <br/>
 
 # DST (Daylight Saving Time) 일광 절약 시간제 / 서머 타임
+
 https://namu.wiki/w/%EC%84%9C%EB%A8%B8%ED%83%80%EC%9E%84
 
 - 하계철에는 표준시를 UTC+1:00만큼 증가시켜서 일출 및 일몰시간을 인위적으로 뒤로 조정하여 오전의 일광을 오후에 활용할 수 있도록 한다
-(서머타임이 실시되면 8시를 9시로, 2시를 3시로 바꿔 표기함, 평소 8시 출근이면 서머타임 땐 실질적으로 7시에 출근하는 꼴임)
+  (서머타임이 실시되면 8시를 9시로, 2시를 3시로 바꿔 표기함, 평소 8시 출근이면 서머타임 땐 실질적으로 7시에 출근하는 꼴임)
 - 모든 시계의 바늘을 한 시간 앞당기고, 모든 사람이 이 변경된 시계에 따라 생활한다고 함
 - 조명과 연료 등의 절감 효과를 기대할 수 있기 때문에 도입됨
 - 일광 절약 시간제는 통상 봄에서 가을까지(3월 중순 ~ 11월 초) 계속됨
@@ -248,54 +250,56 @@ https://namu.wiki/w/%EC%84%9C%EB%A8%B8%ED%83%80%EC%9E%84
 <br/>
 
 # Date 객체
+
 https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date/Date
 
 ```
 Date(): string; // 문자열 반환
 new Date(): Date; // Date 객체 반환
 ```
+
 <br/>
 
 ※ Date()와 new Date().toString()이 반환하는 문자열은 RFC2822 형식과 유사한 문자열을 반환하나 RFC2822 형식은 아님!!, 브라우저 마다 출력값이 다를 수 있다고 함
 
-|OS|브라우저 종류|Date()|new Date().toString()|
-|-----|-----|-----|-----|
-|mac|chrome|Thu Apr 04 2024 13:31:31 GMT+0900 (한국 표준시)|Thu Apr 04 2024 13:41:35 GMT+0900 (한국 표준시)|
-|mac|safari|Thu Apr 04 2024 13:42:12 GMT+0900 (대한민국 표준시)|Thu Apr 04 2024 13:42:29 GMT+0900 (대한민국 표준시)|
-|window|chrome|Thu Apr 04 2024 13:43:37 GMT+0900 (한국 표준시)|Thu Apr 04 2024 13:43:37 GMT+0900 (한국 표준시)|
-|window|whale|Thu Apr 04 2024 13:43:37 GMT+0900 (한국 표준시)|Thu Apr 04 2024 13:43:37 GMT+0900 (한국 표준시)|
-|mac|iPhone12(시뮬레이터, ios 14.4, 대한민국, 한국어 설정)<br/>(safari 개발자도구)|Thu Apr 04 2024 13:51:49 GMT+0900 (KST)|Thu Apr 04 2024 13:51:49 GMT+0900 (KST)|
-|mac|iPhone14(시뮬레이터, ios16.1, 미국, 한국어 설정)|Thu Apr 04 2024 13:53:02 GMT+0900 (대한민국 표준시)|Thu Apr 04 2024 13:53:02 GMT+0900 (대한민국 표준시)|
-
-
+| OS     | 브라우저 종류                                                                 | Date()                                              | new Date().toString()                               |
+| ------ | ----------------------------------------------------------------------------- | --------------------------------------------------- | --------------------------------------------------- |
+| mac    | chrome                                                                        | Thu Apr 04 2024 13:31:31 GMT+0900 (한국 표준시)     | Thu Apr 04 2024 13:41:35 GMT+0900 (한국 표준시)     |
+| mac    | safari                                                                        | Thu Apr 04 2024 13:42:12 GMT+0900 (대한민국 표준시) | Thu Apr 04 2024 13:42:29 GMT+0900 (대한민국 표준시) |
+| window | chrome                                                                        | Thu Apr 04 2024 13:43:37 GMT+0900 (한국 표준시)     | Thu Apr 04 2024 13:43:37 GMT+0900 (한국 표준시)     |
+| window | whale                                                                         | Thu Apr 04 2024 13:43:37 GMT+0900 (한국 표준시)     | Thu Apr 04 2024 13:43:37 GMT+0900 (한국 표준시)     |
+| mac    | iPhone12(시뮬레이터, ios 14.4, 대한민국, 한국어 설정)<br/>(safari 개발자도구) | Thu Apr 04 2024 13:51:49 GMT+0900 (KST)             | Thu Apr 04 2024 13:51:49 GMT+0900 (KST)             |
+| mac    | iPhone14(시뮬레이터, ios16.1, 미국, 한국어 설정)                              | Thu Apr 04 2024 13:53:02 GMT+0900 (대한민국 표준시) | Thu Apr 04 2024 13:53:02 GMT+0900 (대한민국 표준시) |
 
 ### static method
-|method|return|내용|
-|-----|-----|-----|
-|Date.now()|number|1970년 1월 1일 00:00:00 UTC로부터 지난 시간을 밀리초 단위의 숫자 값으로 반환. 윤초는 무시|
-|Date.parse()|number|날짜를 나타내는 문자열(RFC2822 / ISO8601)을 분석한 후, 해당 날짜와 1970년 1월 1일 00:00:00 UTC의 시간 차이를 밀리초 단위의 숫자 값으로 반환 <br/> ※ Date.parse() 사용한 날짜 분석은 브라우저 간 일관적이지 못하게 동작할 수 있어 사용하지 않는 것이 좋음|
-|Date.UTC()|number|생성자가 받을 수 있는 제일 많은 매개변수(구성요소 각각, 2개 ~ 7개)를 동일하게 받아서, 1970년 1월 1일 00:00:00 UTC의 시간 차이를 밀리초 단위의 숫자 값으로 반환함. 윤초는 무시|
+
+| method       | return | 내용                                                                                                                                                                                                                                                     |
+| ------------ | ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Date.now()   | number | 1970년 1월 1일 00:00:00 UTC로부터 지난 시간을 밀리초 단위의 숫자 값으로 반환. 윤초는 무시                                                                                                                                                                |
+| Date.parse() | number | 날짜를 나타내는 문자열(RFC2822 / ISO8601)을 분석한 후, 해당 날짜와 1970년 1월 1일 00:00:00 UTC의 시간 차이를 밀리초 단위의 숫자 값으로 반환 <br/> ※ Date.parse() 사용한 날짜 분석은 브라우저 간 일관적이지 못하게 동작할 수 있어 사용하지 않는 것이 좋음 |
+| Date.UTC()   | number | 생성자가 받을 수 있는 제일 많은 매개변수(구성요소 각각, 2개 ~ 7개)를 동일하게 받아서, 1970년 1월 1일 00:00:00 UTC의 시간 차이를 밀리초 단위의 숫자 값으로 반환함. 윤초는 무시                                                                            |
 
 <br/>
 
 ## new Date()
+
 https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Date
 
 ```
 new Date()
 ```
 
-| parameter                                                | return value                                                                                                                                                                                                                                                                                                                       |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `timestamp` (UNIX 타임스탬프)                                             | `Local Date`                                                                                                                                                                                                                                                                                                                       |
-| new Date(1706502641069)                                  | Mon Jan 29 2024 13:30:41 GMT+0900 (한국 표준시)|
-| `string (Date.parse() 메서드가 인식할 수 있는 RFC2822 / ISO8601 형태)` ||
-| `string - 시간대(timezone) 표기가 없을 때`               | `Local Date` <br/> `- parameter에 시간대가 없으면 Local Date로 인지함`                                                                                                                                                                                                                                                             |
-| new Date('Mon, 29 Jan 2024 04:33:07')                    | Mon Jan 29 2024 04:33:07 GMT+0900 (한국 표준시)                                                                                                                                                                                                                                                                                    |
-| new Date('2024-01-29 04:33:07')                          | Mon Jan 29 2024 04:33:07 GMT+0900 (한국 표준시)                                                                                                                                                                                                                                                                                    |
-| `string - 시간대(timezone) 표기가 있을 때`               | `Local Date` <br/> `- UTC 등 다른 타임존으로 입력해도, 출력은 Local Date로 함`<br/> `- Date.parse()가 인식할 수 있는 문자열` <br/> `- Date.parse() 등 날짜 파싱은 일관적이지 않고, 브라우저끼리 차이가 존재해서 사용하지 않는 것이 좋음` <br/> `- 문자열에 이슈가 있으면 NaN 반환! (ex. 2024-1-1 은 safari에서 Invalid Date 발생)` |
-| new Date('Mon, 29 Jan 2024 04:33:07 GMT') // UTC         | Mon Jan 29 2024 13:33:07 GMT+0900 (한국 표준시) // KST                                                                                                                                                                                                                                                                             |
-| new Date('2024-01-29T04:30:41.069Z') // ISO string = UTC | Mon Jan 29 2024 13:30:41 GMT+0900 (한국 표준시) // KST                                                                                                                                                                                                                                                                             |
+| parameter                                                              | return value                                                                                                                                                                                                                                                                                                                       |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `timestamp` (UNIX 타임스탬프)                                          | `Local Date`                                                                                                                                                                                                                                                                                                                       |
+| new Date(1706502641069)                                                | Mon Jan 29 2024 13:30:41 GMT+0900 (한국 표준시)                                                                                                                                                                                                                                                                                    |
+| `string (Date.parse() 메서드가 인식할 수 있는 RFC2822 / ISO8601 형태)` |                                                                                                                                                                                                                                                                                                                                    |
+| `string - 시간대(timezone) 표기가 없을 때`                             | `Local Date` <br/> `- parameter에 시간대가 없으면 Local Date로 인지함`                                                                                                                                                                                                                                                             |
+| new Date('Mon, 29 Jan 2024 04:33:07')                                  | Mon Jan 29 2024 04:33:07 GMT+0900 (한국 표준시)                                                                                                                                                                                                                                                                                    |
+| new Date('2024-01-29 04:33:07')                                        | Mon Jan 29 2024 04:33:07 GMT+0900 (한국 표준시)                                                                                                                                                                                                                                                                                    |
+| `string - 시간대(timezone) 표기가 있을 때`                             | `Local Date` <br/> `- UTC 등 다른 타임존으로 입력해도, 출력은 Local Date로 함`<br/> `- Date.parse()가 인식할 수 있는 문자열` <br/> `- Date.parse() 등 날짜 파싱은 일관적이지 않고, 브라우저끼리 차이가 존재해서 사용하지 않는 것이 좋음` <br/> `- 문자열에 이슈가 있으면 NaN 반환! (ex. 2024-1-1 은 safari에서 Invalid Date 발생)` |
+| new Date('Mon, 29 Jan 2024 04:33:07 GMT') // UTC                       | Mon Jan 29 2024 13:33:07 GMT+0900 (한국 표준시) // KST                                                                                                                                                                                                                                                                             |
+| new Date('2024-01-29T04:30:41.069Z') // ISO string = UTC               | Mon Jan 29 2024 13:30:41 GMT+0900 (한국 표준시) // KST                                                                                                                                                                                                                                                                             |
 
 <br/>
 <br/>
@@ -379,6 +383,7 @@ timeZone: 'Asia/Seoul',
 <br/>
 
 # Luxon 코드 분석 (dateTime.js)
+
 - IANA database 어떻게 가져와서 사용하는지
 - dst 계산 어떻게 하는지
 
@@ -389,8 +394,10 @@ timeZone: 'Asia/Seoul',
 <br/>
 
 ## (1) 입력받은 timezone이 유효한지 여부 확인 로직
+
 - IANAZone.js > 101 line: isValieZone()
-``` 
+
+```
   /**
    * Returns whether the provided string identifies a real zone
    * @param {string} zone - The string to check
@@ -415,9 +422,12 @@ timeZone: 'Asia/Seoul',
 <br/>
 
 ## (2) offset 구하는 방법
+
+- IANAZone 데이터를 별도로 사용하지 않고, Intl.DateTimeFormat을 이용하여 계산 및 데이터 가공함
 - IANAZone.js > 147 line: offset()
+
 ```
-let dtfCache = {};
+let dtfCache = {}; // Intl.DateTimeFormat 데이터 담아둠
 function makeDTF(zone) {
   if (!dtfCache[zone]) {
     dtfCache[zone] = new Intl.DateTimeFormat("en-US", {
@@ -452,8 +462,8 @@ function hackyOffset(dtf, date) {
   return [fYear, fMonth, fDay, fadOrBc, fHour, fMinute, fSecond];
 }
 
-/* 
-  - Intl.DateTimeFormat().formatToParts() 
+/*
+  - Intl.DateTimeFormat().formatToParts()
   https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/DateTimeFormat/formatToParts
 */
 function partsOffset(dtf, date) {
@@ -538,22 +548,68 @@ offset(ts) {
 - dtf: Intl.DateTimeFormat().formatToParts() 통해 타임존에 해당하는 (로컬)시간을 구함
 - asUTC: dtf 값을 Date.UTC()로 변환하여 타임존에 해당하는 시간의 UTC 시간
 
+<br/>
+<br/>
 
+## DST 계산 방법
+
+```
+/**
+  // 또잉 사용하는 곳은 없음. 단순 get 함수인듯??
+   * Get whether the DateTime is in a DST.
+   * @type {boolean}
+   */
+  get isInDST() {
+    if (this.isOffsetFixed) { // DST 없이 고정된 offset인 경우
+      return false;
+    } else {
+      return (
+        this.offset > this.set({ month: 1, day: 1 }).offset ||
+        this.offset > this.set({ month: 5 }).offset
+      );
+    }
+  }
+
+```
 
 <br/>
 <br/>
 
 # Date 관련 라이브러리 비교
+
 https://npmtrends.com/date-fns-vs-dayjs-vs-luxon-vs-moment
 
-- moment 
-https://momentjs.com/
+- moment
+  https://momentjs.com/
   - moment
   - moment-timezone
   - luxon
 - dayjs
 - date-fns
 - luxon
+
+## luxon 분석
+
+#### (1) 용량
+
+- require용 js: build/node/luxon.js (244KB)
+- import용 js: src/luxon.js (datetime.js 최대 90KB)
+
+<br/>
+
+#### (2) 구성
+
+```
+- build
+- src
+  - impl: util 코드
+  - zones
+    - fixedOffsetZone.js: DST 없이 고정된 offset 시간을 가진 타임존 코드
+    - IANAZone.js: America/New_York와 같이 IANA 식별자로 식별되는 타임존 코드
+    - invalidZone.js: 구문 분석에 실패했을 때 사용하는 타임존 코드
+    - systemZone.js: 로컬 타임존 코드
+  - datetime.js: DateTime class (luxon은 대부분 DateTime을 사용함 (ex) DateTime.fromObject({day: 22, hour: 12 }, { zone: 'America/Los_Angeles', numberingSystem: 'beng'}))
+```
 
 <br/>
 <br/>
