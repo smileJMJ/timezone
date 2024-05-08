@@ -553,6 +553,8 @@ offset(ts) {
 
 ## DST 계산 방법
 
+- 별도로 계산할 필요가 없음.. Intl.DateTimeFormat을 이용하여 offset 계산 해버리면 DST 계산할 필요가 없음...
+
 ```
 /**
   // 또잉 사용하는 곳은 없음. 단순 get 함수인듯??
@@ -578,6 +580,11 @@ offset(ts) {
 # Date 관련 라이브러리 비교
 
 https://npmtrends.com/date-fns-vs-dayjs-vs-luxon-vs-moment
+
+<img src="./readme/date_package_compare.png" alt="" />
+
+<br/>
+moment > dayjs > date-fns > luxon
 
 - moment
   https://momentjs.com/
