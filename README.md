@@ -595,16 +595,28 @@ moment > dayjs > date-fns > luxon
 - date-fns
 - luxon
 
-## luxon 분석
-
-#### (1) 용량
-
-- require용 js: build/node/luxon.js (244KB)
-- import용 js: src/luxon.js (datetime.js 최대 90KB)
 
 <br/>
+<br/>
 
-#### (2) 구성
+## moment 
+- build 파일: 156KB
+- 트리쉐이킹 알고리즘과 잘 동작하지 않아 번들의 크기가 커지는 경향이 있음
+- locale 관련 js 파일들을 갖고 있음 (ex) /locale/ko.js 등
+- 국제화/타임존 관련 지원은 Intl 객체를 사용하는 Luxon과 같은 라이브러리를 이용하여 자체 데이터 파일 제공을 줄이거나 제거 가능 
+https://momentjs.com/docs/#/-project-status/
+- moment를 유지 관리 모드의 레거시 프로젝트로 간주한다고 함
+- Intl 객체를 사용하는 Luxon, Day.js, date-fns 등 다른 라이브러리를 추천하고 있음
+https://momentjs.com/docs/#/-project-status/recommendations/
+
+<br/>
+<br/>
+
+## luxon
+- moment의 진화 버전(?!)
+- Locales, Timezone을 Intl로 제공함
+- require용 js: build/node/luxon.js (244KB)
+- import용 js: src/luxon.js (datetime.js 최대 90KB)
 
 ```
 - build
@@ -617,6 +629,43 @@ moment > dayjs > date-fns > luxon
     - systemZone.js: 로컬 타임존 코드
   - datetime.js: DateTime class (luxon은 대부분 DateTime을 사용함 (ex) DateTime.fromObject({day: 22, hour: 12 }, { zone: 'America/Los_Angeles', numberingSystem: 'beng'}))
 ```
+```
+import { DateTime } from "luxon";
+
+var utc = DateTime.utc(2017, 05, 15, 9, 10, 23);
+
+utc.zoneName; //=> 'UTC'
+utc.toString(); //=> '2017-05-15T09:10:23.000Z'
+```
+
+<br/>
+<br/>
+
+## Day.js
+- Locales: 별도 정의 파일 사용, Timezone: Intl로 제공
+- dayjs.min.js: 7KB
+- locale 관련 js 파일들을 갖고 있음 (ex) /locale/ko.js 등
+- typescript - type declarations 파일 있음
+- dayjs 인스턴스를 사용함
+```
+const dayjs = require('dayjs')
+//import dayjs from 'dayjs' // ES 2015
+dayjs().format()
+```
+
+<br/>
+<br/>
+
+## date-fns
+- Locales: 별도 정의 파일 사용, Timezone: Intl로 제공
+- 각 기능별 모듈화 되어 있어 필요한 기능만 가져와 사용 가능   
+```
+import { format, formatDistance, formatRelative, subDays } from 'date-fns'
+
+format(new Date(), "'Today is a' eeee")
+//=> "Today is a Thursday"
+```
+- typescript - type declarations 파일 있음
 
 <br/>
 <br/>
